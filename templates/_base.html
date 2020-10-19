@@ -1,0 +1,40 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>{% block title %}{% endblock %}</title>
+        <link href="{% static "css/base.css" %}" rel="stylesheet">
+    </head>
+    <body>
+        <header>
+            <span class="logo">Django Social Network</span>
+            {% if request.user.is_authenticated %}
+              <ul class="menu">
+                <li {% if current_section == "dashboard" %}class="selected"{% endif %}>
+                  <a href="{% url "dashboard" %}">My dashboard</a>
+                </li>
+                <li {% if current_section == "images" %}class="selected"{% endif %}>
+                  <a href="#">Images</a>
+                </li>
+                <li {% if current_section == "people" %}class="selected"{% endif %}>
+                  <a href="#">People</a>
+                </li>
+              </ul>
+            {% endif %}
+
+          <span class="user">
+            {% if request.user.is_authenticated %}
+              Привет {{ request.user.first_name }},
+              <a href="{% url "logout" %}">выход</a>
+            {% else %}
+              <a href="{% url "login" %}">Вход</a>
+            {% endif %}
+          </span>
+        </header>
+
+        <div id="content">
+            {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
