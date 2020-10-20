@@ -1,0 +1,7 @@
+{% autoescape off %}
+Привет! Недавно Вы регистрировались на Django Social Network.
+
+Пожалуйста, перейти по ссылке ниже для завершения регистрации:
+
+http://{{ domain }}{% url 'account_activation' uidb64=uid token=token %}
+{% endautoescape %}

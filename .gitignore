@@ -183,3 +183,7 @@ frontend/build-config.json
 static/bundles/*
 /frontend/yarn.lock
 frontend/package-lock.json
+
+
+# Migations
+*/migrations/*_*.py

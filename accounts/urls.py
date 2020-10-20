@@ -5,9 +5,13 @@ from . import views
 
 
 urlpatterns = [
-    path('', include('django.contrib.auth.urls')),
-
-    path('', views.dashboard, name='dashboard'),
-    # path('register/', views.register, name='register'),
-    # path('edit/', views.edit, name='edit'),
+    path("", include("django.contrib.auth.urls")),
+    path("register/", views.RegisterView.as_view(), name="register"),
+    path(
+        "activate/<str:uidb64>/<str:token>/",
+        views.AccountActivationView.as_view(),
+        name="account_activation",
+    ),
+    path("", views.DashboardView.as_view(), name="dashboard"),
+    path("edit/", views.AccountEditView.as_view(), name="edit"),
 ]
