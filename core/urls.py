@@ -5,11 +5,10 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path(
-        "", RedirectView.as_view(pattern_name="dashboard", permanent=False), name="main"
-    ),
+    path("", RedirectView.as_view(pattern_name="dashboard", permanent=False), name="main"),
     path("admin/", admin.site.urls),
     path("accounts/", include("accounts.urls")),
+    path("social-auth/", include("social_django.urls", namespace="social")),
 ]
 
 if settings.DEBUG:

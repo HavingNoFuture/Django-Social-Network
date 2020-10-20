@@ -17,4 +17,15 @@
       <p><input type="submit" value="Вход"></p>
     </form>
   </div>
+
+  <div class="social">
+    <ul>
+      <li class="facebook">
+        <a href="{% url "social:begin" "facebook" %}">Войти с помощью Facebook</a>
+      </li>
+      <li class="twitter">
+        <a href="{% url "social:begin" "twitter" %}">Войти с помощью Twitter</a>
+      </li>
+    </ul>
+  </div>
 {% endblock %}
