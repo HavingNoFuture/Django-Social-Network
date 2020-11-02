@@ -1,8 +1,9 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.contrib.auth.admin import UserAdmin
-from .forms import UserRegistrationForm, UserEditForm
+from django.utils.translation import gettext_lazy as _
 
+from .forms import UserRegistrationForm, UserEditForm
 from .models import Profile
 
 
@@ -12,32 +13,34 @@ class CustomUserAdmin(UserAdmin):
     form = UserEditForm
     model = get_user_model()
     list_display = (
+        "username",
         "email",
         "is_staff",
         "is_active",
     )
     list_filter = (
-        "email",
         "is_staff",
         "is_active",
     )
+    search_fields = ("username", "email")
+    ordering = ("-id",)
+
     fieldsets = (
-        (None, {"fields": ("email", "password")}),
-        ("Permissions", {"fields": ("is_staff", "is_active")}),
-    )
-    add_fieldsets = (
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "middle_name", "last_name", "email")}),
         (
-            None,
+            _("Permissions"),
             {
-                "classes": ("wide",),
-                "fields": ("email", "password1", "password2", "is_staff", "is_active"),
+                "fields": ("is_active", "is_staff", "is_superuser", "groups", "user_permissions"),
             },
         ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    search_fields = ("email",)
-    ordering = ("email",)
 
 
 @admin.register(Profile)
 class ProfileAdmin(admin.ModelAdmin):
-    list_display = ["user", "date_of_birth", "avatar"]
+    list_display = ("user", "gender", "phone")
+    list_filter = ("gender",)
+    search_fields = ("user.username", "user.email")
+    ordering = ("-id",)

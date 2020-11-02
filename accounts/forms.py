@@ -60,7 +60,7 @@ class UserEditForm(UserChangeForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "middle_name", "email")
+        fields = ("first_name", "middle_name", "last_name", "email")
 
 
 class ProfileEditForm(forms.ModelForm):
@@ -70,4 +70,4 @@ class ProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ("date_of_birth", "avatar", "github", "bio", "phone", "skills", "gender")
+        fields = ("date_of_birth", "avatar", "github_url", "bio", "phone", "skills", "gender")

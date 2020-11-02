@@ -15,8 +15,8 @@ class User(AbstractUser):
     """
 
     email = models.EmailField(_("email address"), unique=True)
-    middle_name = models.CharField(max_length=50)
-    first_login = models.DateTimeField(blank=True, null=True)
+    middle_name = models.CharField("Отчество", max_length=50, blank=True, null=True)
+    first_login = models.DateTimeField(_("first login"), blank=True, null=True)
 
     objects = AccountManager()
 
@@ -28,22 +28,29 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
 
+    def get_full_name(self):
+        if self.middle_name:
+            full_name = f"{self.first_name} {self.middle_name} {self.last_name}"
+        else:
+            full_name = f"{self.first_name} {self.last_name}"
+        return full_name
+
 
 class Profile(models.Model):
     """
     Профиль пользователя
     """
 
-    GENDER = (("male", "male"), ("female", "female"))
+    GENDER = (("male", "Мужчина"), ("female", "Женщина"))
 
     user = models.OneToOneField(get_user_model(), verbose_name="Аккаунт", on_delete=models.CASCADE)
     date_of_birth = models.DateField("Дата рождения", blank=True, null=True)
-    avatar = models.ImageField("Аватар", upload_to="users/%Y/%m/%d/", blank=True)
-    github = models.CharField(max_length=500, blank=True, null=True)
-    bio = models.TextField(blank=True, null=True)
-    phone = models.CharField(max_length=14)
-    skills = models.ManyToManyField("Skill", related_name="users")
-    gender = models.CharField(max_length=6, choices=GENDER, default="male")
+    avatar = models.ImageField("Аватар", upload_to="users/%Y/%m/%d/", blank=True, null=True)
+    github_url = models.CharField("Ссылка на Github", max_length=500, blank=True, null=True)
+    bio = models.TextField("О себе", blank=True, null=True)
+    phone = models.CharField("Телефон", max_length=14, blank=True, null=True)
+    skills = models.ManyToManyField("Skill", related_name="users", verbose_name="Навыки", blank=True, null=True)
+    gender = models.CharField("Пол", max_length=6, choices=GENDER, blank=True, null=True)
 
     class Meta:
         verbose_name = "Профиль пользователя"
@@ -69,7 +76,7 @@ class Skill(models.Model):
     Модель навыков пользователя
     """
 
-    name = models.CharField(max_length=100)
+    name = models.CharField("Название", max_length=100)
 
     def __str__(self):
         return self.name
