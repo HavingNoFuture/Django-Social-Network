@@ -1,19 +1,26 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.views import LoginView
 from django.shortcuts import render
-from django.template.loader import render_to_string
-from django.utils.encoding import force_bytes, force_text
-from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import CreateView, FormView, UpdateView
+from django.utils.encoding import force_text
+from django.utils.http import urlsafe_base64_decode
+from django.views.generic import FormView
 from django.views.generic.base import TemplateView, View
 
-from accounts.forms import UserRegistrationForm, UserEditForm, ProfileEditForm
+from accounts.forms import UserRegistrationForm, UserEditForm, ProfileEditForm, UserLoginForm
 from accounts.tokens import account_activation_token
 from utils.utils import simple_response
 
 User = get_user_model()
+
+
+class UserLoginView(LoginView):
+    """
+    Авторизация пользователя по username или email и паролю
+    """
+
+    form_class = UserLoginForm
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -83,9 +90,7 @@ class AccountEditView(LoginRequiredMixin, View):
 
     def post(self, request, *args, **kwargs):
         user_form = UserEditForm(instance=request.user, data=request.POST)
-        profile_form = ProfileEditForm(
-            instance=request.user.profile, data=request.POST, files=request.FILES
-        )
+        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()

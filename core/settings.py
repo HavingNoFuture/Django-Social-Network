@@ -90,7 +90,7 @@ DATABASES = {
     },
 }
 
-AUTH_USER_MODEL = "accounts.Account"
+AUTH_USER_MODEL = "accounts.User"
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -112,6 +112,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
+    "accounts.auth_backends.EmailAuthBackend",
     "social_core.backends.facebook.FacebookOAuth2",
     "social_core.backends.twitter.TwitterOAuth",
     "social_core.backends.google.GoogleOAuth2",

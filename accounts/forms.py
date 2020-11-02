@@ -1,13 +1,26 @@
 from django import forms
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
+from django.utils.translation import ugettext_lazy as _
 
 from accounts.models import Profile
 from accounts.tokens import account_activation_token
+
+
+class UserLoginForm(AuthenticationForm):
+    username = forms.CharField(label="Email или логин", widget=forms.TextInput(attrs={"autofocus": True}))
+
+    error_messages = {
+        "invalid_login": _(
+            "Пожалуйста, введите правильную пару Email/имя пользователя и пароль. "
+            "Оба поля могут быть чувствительны к регистру."
+        ),
+        "inactive": _("This account is inactive."),
+    }
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -17,7 +30,7 @@ class UserRegistrationForm(UserCreationForm):
 
     class Meta(UserCreationForm):
         model = get_user_model()
-        fields = ("email", "password1", "password2")
+        fields = ("email", "username", "password1", "password2")
 
     def send_activation_email(self, request) -> None:
         """
@@ -29,10 +42,10 @@ class UserRegistrationForm(UserCreationForm):
         message = render_to_string(
             "accounts/account_activation_email.html",
             {
-                "user": self.instance,
+                "user": self.instance.username,
                 "domain": current_site.domain,
                 "uid": urlsafe_base64_encode(force_bytes(self.instance.pk)),
-                "token": account_activation_token.make_token(self.instance),
+                "token": account_activation_token.make_token(self.instance.username),
             },
         )
         self.instance.email_user(subject, message)
@@ -47,7 +60,7 @@ class UserEditForm(UserChangeForm):
 
     class Meta:
         model = get_user_model()
-        fields = ("first_name", "last_name", "email")
+        fields = ("first_name", "last_name", "middle_name", "email")
 
 
 class ProfileEditForm(forms.ModelForm):
@@ -57,4 +70,4 @@ class ProfileEditForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ("date_of_birth", "photo")
+        fields = ("date_of_birth", "avatar", "github", "bio", "phone", "skills", "gender")
