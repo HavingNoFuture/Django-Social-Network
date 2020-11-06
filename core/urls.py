@@ -6,9 +6,11 @@ from django.views.generic import RedirectView
 
 urlpatterns = [
     path("", RedirectView.as_view(pattern_name="dashboard", permanent=False), name="main"),
-    path("admin/", admin.site.urls),
+    path("profiles/", include("profiles.urls", namespace="profiles")),
     path("accounts/", include("accounts.urls")),
+    path("admin/", admin.site.urls),
     path("social-auth/", include("social_django.urls", namespace="social")),
+    path("api-auth/", include("rest_framework.urls")),
 ]
 
 if settings.DEBUG:

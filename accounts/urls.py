@@ -13,5 +13,4 @@ urlpatterns = [
         name="account_activation",
     ),
     path("", views.DashboardView.as_view(), name="dashboard"),
-    path("edit/", views.AccountEditView.as_view(), name="edit"),
 ]

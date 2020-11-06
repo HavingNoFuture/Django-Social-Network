@@ -7,7 +7,6 @@ from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode
 from django.utils.translation import ugettext_lazy as _
 
-from accounts.models import Profile
 from accounts.tokens import account_activation_token
 
 
@@ -61,13 +60,3 @@ class UserEditForm(UserChangeForm):
     class Meta:
         model = get_user_model()
         fields = ("first_name", "middle_name", "last_name", "email")
-
-
-class ProfileEditForm(forms.ModelForm):
-    """
-    Форма редактирования профиля
-    """
-
-    class Meta:
-        model = Profile
-        fields = ("date_of_birth", "avatar", "github_url", "bio", "phone", "skills", "gender")

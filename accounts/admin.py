@@ -4,7 +4,6 @@ from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
 
 from .forms import UserRegistrationForm, UserEditForm
-from .models import Profile
 
 
 @admin.register(get_user_model())
@@ -36,11 +35,3 @@ class CustomUserAdmin(UserAdmin):
         ),
         (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-
-
-@admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
-    list_display = ("user", "gender", "phone")
-    list_filter = ("gender",)
-    search_fields = ("user.username", "user.email")
-    ordering = ("-id",)

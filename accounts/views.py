@@ -1,4 +1,3 @@
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
@@ -8,7 +7,7 @@ from django.utils.http import urlsafe_base64_decode
 from django.views.generic import FormView
 from django.views.generic.base import TemplateView, View
 
-from accounts.forms import UserRegistrationForm, UserEditForm, ProfileEditForm, UserLoginForm
+from accounts.forms import UserRegistrationForm, UserLoginForm
 from accounts.tokens import account_activation_token
 from utils.utils import simple_response
 
@@ -72,33 +71,3 @@ class AccountActivationView(View):
             return render(request, "accounts/register_done.html", {"new_user": user})
         else:
             return simple_response(request, "Неверная ссылка активации аккаунта!")
-
-
-class AccountEditView(LoginRequiredMixin, View):
-    """
-    Редактирование аккаунта и профиля пользователя
-    """
-
-    def get(self, request, *args, **kwargs):
-        user_form = UserEditForm(instance=request.user)
-        profile_form = ProfileEditForm(instance=request.user.profile)
-        return render(
-            request,
-            "accounts/edit.html",
-            {"user_form": user_form, "profile_form": profile_form},
-        )
-
-    def post(self, request, *args, **kwargs):
-        user_form = UserEditForm(instance=request.user, data=request.POST)
-        profile_form = ProfileEditForm(instance=request.user.profile, data=request.POST, files=request.FILES)
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            messages.success(request, "Профиль был успешно обновлен")
-        else:
-            messages.error(request, "Ошибка при обновлении профиля")
-        return render(
-            request,
-            "accounts/edit.html",
-            {"user_form": user_form, "profile_form": profile_form},
-        )

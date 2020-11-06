@@ -1,0 +1,60 @@
+{% extends "_base.html" %}
+
+{% block title %}Профиль{% endblock %}
+
+{% block content %}
+  <h1>Профиль пользователя {{ object.user.username }}</h1>
+  <div class="container mx-0">
+    <div class="row">
+      <div class="col-7">
+        <div class="row my-3">
+          <div class="col-2 text-right">ФИО</div>
+          <div class="col-10">{{ object.user.get_full_name }}</div>
+        </div>
+        <div class="row my-3">
+          <div class="col-2 text-right">Email</div>
+          <div class="col-10">{{ object.user.email }}</div>
+        </div>
+        {% if object.phone %}
+          <div class="row my-3">
+            <div class="col-2 text-right">Телефон</div>
+            <div class="col-10">{{ object.phone }}</div>
+          </div>
+        {% endif %}
+        {% if object.gender %}
+          <div class="row my-3">
+            <div class="col-2 text-right">Пол</div>
+            <div class="col-10">{{ object.gender }}</div> {# TODO: Выводить дефолтные значения #}
+          </div>
+        {% endif %}
+        {% if object.user.date_of_birth %}
+          <div class="row my-3">
+            <div class="col-2 text-right">Дата рождения</div>
+            <div class="col-10">{{ object.user.date_of_birth }}</div>
+          </div>
+        {% endif %}
+        {% if object.github_url %}
+          <div class="row my-3">
+            <div class="col-2 text-right">Github</div>
+            <div class="col-10">{{ object.github_url }}</div>
+          </div>
+        {% endif %}
+        <div class="row my-3">
+          <div class="col-2 text-right">Навыки</div>
+          <div class="col-10">{% if object.skills.count == 0 %}{% else %}{{ object.skills }}{% endif %}</div>
+        </div>
+        {% if object.bio %}
+          <div class="row my-3">
+            <div class="col-2 text-right">Био</div>
+            <div class="col-10">{{ object.bio }}</div>
+          </div>
+        {% endif %}
+      </div>
+      <div class="col-5 my-3">
+        <img src="{{ object.avatar.url }}" alt="Аватар" class="img-fluid rounded" width="400">
+        <p></p>
+        <p>Вы можете отредактировать свой профиль <a href="{% url 'profiles:edit' %}">здесь</a>.</p>
+      </div>
+    </div>
+  </div>
+{% endblock %}

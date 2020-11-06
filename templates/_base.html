@@ -5,14 +5,18 @@
   <head>
     <title>{% block title %}{% endblock %}</title>
       <link href="{% static "css/base.css" %}" rel="stylesheet">
+      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
   </head>
   <body>
     <header>
-      <span class="logo">Django Social Network</span>
+      <span class="logo"><a href="{% url 'main' %}">Django Social Network</a></span>
       {% if request.user.is_authenticated %}
         <ul class="menu">
         <li {% if current_section == "dashboard" %}class="selected"{% endif %}>
           <a href="{% url "dashboard" %}">My dashboard</a>
+        </li>
+        <li {% if current_section == "profile" %}class="selected"{% endif %}>
+          <a href="{% url "profiles:me" %}">My profile</a>
         </li>
         <li {% if current_section == "images" %}class="selected"{% endif %}>
           <a href="#">Images</a>
