@@ -25,8 +25,18 @@ class ProfileView(ProfileViewMixin, DetailView):
     Вывод информации профиля пользователя
     """
 
+    slug_field = "user__username"
     template_name = "profiles/profile.html"
-    queryset = Profile.objects.select_related("user").all()
+    queryset = Profile.objects.select_related("user").filter(user__is_active=True)
+
+
+class MyProfileView(ProfileViewMixin, LoginRequiredMixin, DetailView):
+    """
+    Вывод информации своего профиля пользователя
+    """
+
+    template_name = "profiles/profile.html"
+    queryset = Profile.objects.select_related("user").filter(user__is_active=True)
 
     def get_object(self, queryset=None):
         profile_object = self.queryset.get(user__id=self.request.user.id)
